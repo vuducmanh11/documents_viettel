@@ -1,0 +1,8 @@
+- distributed virtual router
+https://specs.openstack.org/openstack/neutron-specs/specs/juno/neutron-ovs-dvr.html
+https://docs.openstack.org/neutron/pike/admin/deploy-ovs-ha-dvr.html
+- BGP VPN 
+https://docs.openstack.org/networking-bgpvpn/latest/
+https://www.cisco.com/c/en/us/products/ios-nx-os-software/border-gateway-protocol-bgp-vpns/index.html
+- VRF
+https://vnpro.vn/thu-vien/kien-truc-tong-quan-mpls-vpn-virtual-routing-forwarding-vrf-2105.html

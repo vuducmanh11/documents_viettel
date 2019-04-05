@@ -6,3 +6,8 @@ https://docs.openstack.org/networking-bgpvpn/latest/
 https://www.cisco.com/c/en/us/products/ios-nx-os-software/border-gateway-protocol-bgp-vpns/index.html
 - VRF
 https://vnpro.vn/thu-vien/kien-truc-tong-quan-mpls-vpn-virtual-routing-forwarding-vrf-2105.html
+
+- @@
+https://www.cisco.com/c/en/us/td/docs/switches/datacenter/pf/configuration/guide/b-pf-configuration/Introducing-Cisco-Programmable-Fabric-VXLAN-EVPN.html
+
+https://www.slideshare.net/Corporateservices/mpls-46866515

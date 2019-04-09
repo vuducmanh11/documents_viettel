@@ -11,3 +11,9 @@ https://vnpro.vn/thu-vien/kien-truc-tong-quan-mpls-vpn-virtual-routing-forwardin
 https://www.cisco.com/c/en/us/td/docs/switches/datacenter/pf/configuration/guide/b-pf-configuration/Introducing-Cisco-Programmable-Fabric-VXLAN-EVPN.html
 
 https://www.slideshare.net/Corporateservices/mpls-46866515
+
+- rpf check
+https://community.cisco.com/t5/networking-documents/understanding-basics-of-multicast-rpf-reverse-path-forwarding/ta-p/3133404
+https://www.juniper.net/documentation/en_US/junos/topics/concept/multicast-reverse-path-forwarding.html
+- ip address spoofing
+https://www.techrepublic.com/article/prevent-ip-spoofing-with-the-cisco-ios/

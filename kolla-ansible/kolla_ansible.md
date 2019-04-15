@@ -349,7 +349,7 @@ cd kolla-ansible/tools
 . /usr/share/kolla-ansible/init-runonce
 ```
 
-  - trên Ubuntu 
+    - trên Ubuntu 
 
 ```
 . /usr/local/share/kolla-ansible/init-runonce

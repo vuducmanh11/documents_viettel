@@ -1,0 +1,3 @@
+https://vim.fandom.com/wiki/File_explorer
+https://docs.docker.com/registry/deploying/
+curl -X GET 10.61.127.80:5000/v2/_catalog

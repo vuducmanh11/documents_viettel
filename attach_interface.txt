@@ -1,0 +1,47 @@
+- Create manh.xml to define network on host
+<network>
+  <name>manh</name>
+  <forward mode='nat'/>
+  <bridge name='br0' stp='on' delay='0'/>
+  <ip address='10.0.0.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='10.0.0.2' end='10.0.0.254'/>
+    </dhcp>
+  </ip>
+</network>
+- Create network
+virsh net-define manh.xml
+virsh net-start manh
+- Check interface 
+ifconfig br0
+- Edit VM config
+virsh edit "nameVM"
+- Add tag interface
+<interface type='bridge'>
+  <source bridge='br0'/>
+  <model type='virtio'/>
+</interface>
+- Start VM, check network 
+
+- Create network-script file
+sudo vim /etc/sysconfig/network-scripts/ifcfg-eth1
+TYPE=Ethernet
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=static
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_AUTOCONF=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=eth1
+DEVICE=eth1
+ONBOOT=yes
+IPADDR=10.0.0.10
+NETMASK=255.255.255.0
+GATEWAY=10.0.0.1
+DNS1=8.8.8.8
+- Restart network
+sudo service network restart

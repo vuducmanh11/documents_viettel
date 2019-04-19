@@ -1,0 +1,5 @@
+- https://www.theurbanpenguin.com/using-cloud-images-in-kvm/
+
+- Create VM
+
+virt-install --virt-type=kvm --name vm1 --ram 20000 --vcpus=4 --os-variant centos7.0 --virt-type=kvm  --network network=default,model=virtio --graphics vnc,listen=0.0.0.0 --noautoconsole --disk /var/lib/libvirt/images/centos7.img,device=disk,bus=virtio --disk /var/lib/libvirt/images/centos.iso,device=cdrom --cpu host

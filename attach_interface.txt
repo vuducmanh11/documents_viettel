@@ -24,7 +24,7 @@ virsh edit "nameVM"
 - Start VM, check network 
 
 - Create network-script file
-sudo vim /etc/sysconfig/network-scripts/ifcfg-eth1
+sudo vi /etc/sysconfig/network-scripts/ifcfg-eth1
 TYPE=Ethernet
 PROXY_METHOD=none
 BROWSER_ONLY=no

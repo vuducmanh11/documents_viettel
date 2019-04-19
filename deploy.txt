@@ -1,0 +1,42 @@
+
+- Configure pip 
+bash
+mkdir -p ~/.config/pip
+cat << EOF > ~/.config/pip/pip.conf 
+[global]
+trusted-host = 10.240.201.50    
+index = http://10.240.201.50:8081/repository/pypi
+index-url = http://10.240.201.50:8081/repository/pypi/simple
+extra-index-url = http://10.240.201.50:8081/repository/pypi/simple
+EOF
+- Edit multinode file
+- Check ping all
+- Kolla passwords
+```
+cd kolla-ansible/tools
+./generate_passwords.py
+```
+- Copy globals.yml and passwords.yml for backup
+```
+cp /etc/kolla/globals.yml /etc/kolla/globals.yml.init
+cp /etc/kolla/passwords.yml  /etc/kolla/passwords.yml.init
+```
+- Edit /etc/kolla/globals.yml
+- Go to kolla-ansible directory
+cd kolla-ansible
+
+- Bootstrapserver
++ disable docker repo
+vim ansible/roles/baremetal/defaults/main.yml
+enable_docker_repo: false
++ disbale docker_legacy_packages
+vim ansible/roles/baremetal/defaults/main.yml
+docker_legacy_packages: false
++ Install pip manual
+```
+sudo yum -y install python-pip
+```
++ Comment task:Install docker SDK for python in ansible/roles/baremetal/tasks/install.ym
+
+
+:

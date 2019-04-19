@@ -1,0 +1,5 @@
+
+- Permission deny 
+https://bugzilla.redhat.com/show_bug.cgi?id=1479558
+and
+https://ask.openstack.org/en/question/95198/could-not-access-kvm-kernel-module-permission-deniednfailed-to-initialize-kvm/

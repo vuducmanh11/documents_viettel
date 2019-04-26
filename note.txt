@@ -8,3 +8,7 @@ https://www.vultr.com/docs/installing-fish-shell-on-ubuntu
 docker exec -it nova_libvirt bash
 virsh 
 
+https://www.systutorials.com/816/port-forwarding-using-iptables/
+https://www.cyberciti.biz/tips/linux-bond-or-team-multiple-network-interfaces-nic-into-single-interface.html
+
+https://docs.openstack.org/kolla-ansible/4.0.0/cinder-guide.html

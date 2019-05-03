@@ -1,0 +1,14 @@
+# Apply common to all hosts
+
+- hosts: all
+
+  roles: 
+  - common
+
+
+# Apply to control
+
+- hosts: control
+
+  roles: 
+  - control

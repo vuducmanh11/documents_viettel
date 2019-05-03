@@ -3,8 +3,8 @@ Tungsten Fabric vRouter được cài đặt trên mỗi host chạy workloads (
 
 ## Architecture
 
-vRouter giao tiếp với controller thông qua XMPP (một messaging protocol). vRouter thực hiện IRB (Integrated Bridgine and Routing) chức năng của router vật lý. 
-vRouter gồm 2 thành phần: vRouter Agent và vRouter Forwarder kết nối với nhau qua ptk0. vRouter chạy trên mỗi host, kết nối với Tungsten Fabric qua overlay network
+vRouter giao tiếp với controller thông qua XMPP (một messaging protocol). vRouter thực hiện IRB (Integrated Bridgine and Routing: chuyển tiếp packet giữa layer2 và layer 3 qua interface *irb*) chức năng của router vật lý.
+vRouter gồm 2 thành phần: vRouter Agent và vRouter Forwarder kết nối với nhau qua ptk0. Các vRouter chạy trên mỗi host kết nối với nhau qua overlay network
 - vRouter agent chứa một session với controller và gửi thông tin về VRFs,các route, access control list (ACLs). vRouter lưu trữ thông tin trên database của nó, và sử dụng thông tin đó để cấu hình vRouter Forwarder, vRouter chạy trên user space của máy host.
 - vRouter Forwarder chạy như một kernel module trong user space khi DPDK được sử dụng, hoặc trong một network interface card có thể lập trình "smart NIC", vRouter Forwarder chứa MPLS và VXLAN table và các VRF, Fabric VRF
   - MPLS table: chứa label chỉ định bởi vRouter khi VM interface up, chỉ mang tính cục bộ trên vRouter, được match với interface để chuyển tiếp gói tin MPLS dựa vào label tới các VM 
@@ -14,7 +14,7 @@ vRouter gồm 2 thành phần: vRouter Agent và vRouter Forwarder kết nối v
 
 ## Detailed Packet Processing Logic In a vRouter
 
-### Packet từ một VM tới VM khác 
+### Packet flow between VMs  
 
 ![](images/TFA_out_packet.png)
 
@@ -27,7 +27,9 @@ vRouter gồm 2 thành phần: vRouter Agent và vRouter Forwarder kết nối v
 7. Nếu DMAC không khớp với vRouter MAC, next hop được tìm kiếm trong IP forwarding table hoặc theo địa chỉ MAC.
 8. Packet được kiểm tra RPF, sau đó thực hiện đóng gói và gửi qua card vật lý.
 
-### Packet từ mang vật lý tới VM 
+RPF (Reverse path forwarding) là kỹ thuật sử dụng trong modern router để đảm bảo multicast packet qua switch sẽ bị drop nếu packet không được chuyển với tuyến đường ngắn nhất (tạo multicast routing loop, lãng phí băng thông và tài nguyên router) dựa vào source trên packet. RPF còn giúp chống IP address spoofing, router sẽ không tìm thấy route dựa vào địa chỉ IP nguồn của packet, do đó packet dùng địa chỉ giả mạo sẽ bị drop.
+
+### Packet flow from physical network to VM 
 
 ![](images/TFA_vm_packet.png)
 
@@ -70,50 +72,27 @@ OpenvSwitch gồm ba thành phần chính:
 - ovs-vswitchd thành phần chính của Open vSwitch xử lý các flow setup
 - kernel module: cải thiện hiệu suất của OVS.
 
-
-
-
-# So sánh vRouter với OpenvSwitch
+# Compare vRouter vs OpenvSwitch
 - OVS sử dụng nhiều table với kiến trúc phân cấp: ofproto table, dpcls/Megaflow (subtables), EMC; vRouter sử dụng một huge hash table, tất cả forwarding thread sử dụng chung một flow table.
 
 - Tunnel Types hỗ trợ: OVS hỗ trợ VXLAN, GRE; vRouter hỗ trợ cả VXLAN, MPLSoGRE và MPLSoUDP.
 
 - ARP processing: OVS chỉ broadcast gói tin ARP trừ khi openflow table thực hiện xử lý; vRouter không thực hiện broadcast gói tin ARP, vRouter sử dụng VRRP hoặc host MAC để phản hồi ARP request, thực hiện định tuyến ARP request nếu địa chỉ MAC đích là MAC host, vRouter cũng thực hiện l2 switch bằng cách flooding hoặc forwarding.
 
-# So sánh OpenStack OVS với Tungsten Fabric vRouter
-- Control Plane
-  - OpenStack OVS: ML2 plugin
-  - Tungsten Fabric vRouter: XMPP từ Controller tới vRouter Agent 
-- L2 Forwarding
-  - OpenStack OVS: kết hợp OVS và Linux Bridge Driver
-  - Tungsten Fabric vRouter: được xử lý bình thường
-- L2 Gateway
-  - OpenStack OVS: neutron cung cấp khả năng kết nối mạng tới L2 Gateway bên ngoài, hỗ trợ đóng gói VXLAN 
-  - Tungsten Fabric vRouter: hỗ trợ Native BGP EVPN Layer 2/3, hỗ trợ: MPLSoUDP, MPLSoGRE, VXLAN
-- L3 Routing and Protocols
-  - OpenStack OVS: 
-    - Central routing: thông qua networking node, không phù hợp môi trường nhà khai thác
-    - DVR (Distributed Virtual Router) dựa trên OVS ban đầu chỉ hỗ trợ định tuyến giữa các server, hỗ trợ chậm với traffic giữa client và server.
-    - Protocol: Static Routes, Neutron BGPVPN
-  - Tungsten Fabric vRouter: 
-    - Distributed NAT, Floating IP, Security Group hõ trợ sẵn vRouter
-    - Protocol: BGP L3VPN, BGP EVPN
-- SNAT
-  - OpenStack OVS: cả DVR, SNAT xử lý tập trung
-  - Tungsten Fabric vRouter: thực hiện SNAT phân tán hoàn toàn
-- Security Groups
-  - OpenStack OVS: thực hiện với iptable
-  - Tungsten Fabric vRouter: xử lý bởi vRouter và phân tán
-- DHCP
-  - OpenStack OVS: dựa trên triển khai mạng giới hạn mở rộng
-  - Tungsten Fabric vRouter: xử lý bởi vRouter và phân tán 
-- Floating IP
-  - OpenStack OVS: Centralized L3 Agent
-  - Tungsten Fabric vRouter: dựa trên SNAT và phân tán hoàn toàn
-- L3VPN Gateway Support
-  - OpenStack OVS: mặc định không hỗ trợ
-  - Tungsten Fabric vRouter: BGP L3VPN và Device Manager cho phép workflow tự động kết nối VM và Container với L3VPN network 
+# Compare OpenStack OVS vs Tungsten Fabric vRouter
 
-- Native Network Load Balancing
-  - OpenStack OVS: không có sẵn
-  - Tungsten Fabric vRouter: L3 ECMP
+| Attribute | OpenStack OVS | Tungsten Fabric vRouter |
+| --- | --- | --- |
+| Control Plane | ML2 plugin | XMPP từ Controller tới vRouter Agent |
+| L2 Forwarding | kết hợp OVS và Linux Bridge Driver | được xử lý thông thường bởi vRouter |
+| L2 Gateway | neutron cung cấp khả năng kết nối mạng tới L2 Gateway bên ngoài, hỗ trợ đóng gói VXLAN | hỗ trợ Native BGP EVPN Layer 2/3, hỗ trợ: MPLSoUDP, MPLSoGRE, VXLAN |
+| L3 Routing and Protocols | - DVR (Distributed Virtual Router) dựa trên OVS ban đầu chỉ hỗ trợ định tuyến giữa self-service và provider network trên compute node đảm bảo hiệu suất và tính sẵn có cao <br> - Protocol: Static Routes, Neutron BGPVPN | - Distributed NAT, Floating IP, Security Group hõ trợ sẵn vRouter <br> - Protocol: Static Routes, Neutron BGPVPN |
+| Security | thực hiện với iptable | chính sách mạng và bảo mật được quy định bởi Orchestrator và TF controller, vRouter sẽ thực hiện các chính sách đấy |
+| DHCP | mặc định sử dụng Dnsmasq server chạy trên network node, quản lý tập trung phụ thuộc network node khó quản lý và mở rộng | được thực hiện bởi vRouter khi VM create | 
+
+## Tài liệu tham khảo 
+
++ [OVS vs OpenContrail](https://drive.google.com/file/d/1NrCH7Pf60W_64UPXc-7rBLjCgWEhoak0/view?usp=sharing)
++ [Tungsten Fabric doc](https://tungstenfabric.github.io/website/Tungsten-Fabric-Architecture.html#vrouter-details)
++ [sdn book](https://drive.google.com/file/d/0B9khGR9AH9nubVBHOXAycjRmYmc/view?usp=sharing)
++ [Integrated Routing and Bridging](https://www.oreilly.com/library/view/juniper-mx-series/9781449358143/ch02s09.html)

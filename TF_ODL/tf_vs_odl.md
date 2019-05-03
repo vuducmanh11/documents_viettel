@@ -91,3 +91,7 @@ OSGi framework cho phép các plugin liên kết với các giao thức đang ph
 - Statistics service cung cấp API thu thập số liệu thống kê với mỗi: flow, node connector, queue 
 - Inventory service: cung cấp API xác định thông tin về node, node connector
 - Resource service: cho phép truy vấn trạng thái tài nguyên 
+
+## Tài liệu tham khảo
+[Tungsten Fabric doc](https://tungstenfabric.github.io/website/Tungsten-Fabric-Architecture.html)
+[OpendayLight doc](https://wiki.opendaylight.org/view/OpenDaylight_Controller:Architectural_Framework) 

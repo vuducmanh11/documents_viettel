@@ -1,13 +1,11 @@
+Kolla là một project của OpenStack cung cấp các production-ready container và công cụ triển khai để vận hành hệ thống OpenStack.
+Tài liệu mô tả sử dụng Kolla để build, tùy chỉnh các image để thực hiện cài đặt OpenStack qua kolla-ansible.
+
 # Building Container Images
 
-### Cài đặt Docker
+## Setup environments 
 
-- [Docker on Ubuntu](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
-- [Docker on CentOS](https://docs.docker.com/install/linux/docker-ce/centos/)
-
-### Cài đặt Kolla-ansible for development
-
-#### Install dependency
+### Dependencies 
 
 1. For CentOS, install EPEL
 
@@ -49,60 +47,24 @@ For Ubuntu:
 sudo apt-get install python-pip
 ```
 
-5. Install Ansible
+### Install Docker
 
-For CentOS:
+- [Docker on Ubuntu](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
+- [Docker on CentOS](https://docs.docker.com/install/linux/docker-ce/centos/)
+### Install Kolla
 
-```
-sudo yum install ansible
-```
-
-For Ubuntu:
-
-```
-sudo apt-get install ansible
-```
-
-#### Install Kolla-ansible
-
-1. Clone **kolla** và **kolla-ansible** từ git
+1. Clone **kolla** từ git
 
 ```
 git clone https://github.com/openstack/kolla
-git clone https://github.com/openstack/kolla-ansible
 ```
-
-2. Install requirement của **kolla** và **kolla-ansible**
+2. Install requirement của **kolla**
 
 ```
 sudo pip install -r kolla/requirements.txt
-sudo pip install -r kolla-ansible/requirements.txt
 ```
 
-3. Tạo thư mục **/etc/kolla/**
-
-```
-sudo mkdir -p /etc/kolla
-sudo chown $USER:$USER /etc/kolla
-```
-
-4. Copy configuration files
-
-- To **/etc/kolla** from kolla-ansible repo (globals.yml, passwords.yml) 
-
-```
-cp -r kolla-ansible/etc/kolla/* /etc/kolla
-```
-
-- To directory hiện tại từ inventory file của **kolla-ansible**
-
-```
-cp kolla-ansible/ansible/invetory/* . 
-```
- 
-### Generating kolla-build.conf
-
-**kolla-build.conf** chứa thông tin tùy chỉnh khi build image được lưu ở **etc/kolla/kolla-build.conf** và được copy đến **/etc/kolla/**
+## Generating kolla-build.conf
 
 ```
 sudo pip install tox
@@ -110,35 +72,39 @@ cd kolla/
 tox -e genconfig
 ```
 
-### Building kolla images
+File **kolla-build.conf** được lưu tại **kolla/etc/kolla/kolla-build.conf** chứa các thông tin tùy chỉnh khi build image.
 
-Thực hiện `python tools/build.py` để build image. Mặc định các image được build dựa theo CentOS image, hoặc được chỉ định distro với option `-b`
+## Building kolla images
+
+Thực hiện `python tools/build.py` để build image. Mặc định các image được build dựa theo CentOS image, hoặc được chỉ định distro khác với option `-b`
 
 ```
 python tools/build.py -b ubuntu
 ```
 
-Các distro hỗ trợ building image gồm:
+Các distro hỗ trợ gồm:
 - centos
 - debian
 - oraclelinux
 - rhel
 - ubuntu
 
-Build các image chứa chuỗi string được truyền cùng các dependency:
+Build các image chứa chuỗi string được truyền cùng các dependency
+
+- Thực hiện build keystone image:
 
 ```
 python tools/build.py keystone
 ``` 
 
-Ta có thể build tập các image được định sẵn trong section **profiles** của file **kolla-build.conf** hoặc truyền qua tham số với option **--profile** khi thực hiện build image. Các tùy chọn được xác định trong file *kolla/etc/kolla/kolla-build.conf*
-- infra infrastructure-related images 
-- main core OpenStack images 
-- aux các image phụ trợ như trove, magnum, ironic 
-- default minimal set các image cho việc deploy 
-
+Ta có thể build tập các image được định sẵn trong section **profiles** của file **kolla-build.conf** hoặc truyền qua tham số với option **--profile** khi thực hiện build image. Các tùy chọn được xác định trong file *kolla/etc/kolla/kolla-build.conf* tron section [profiles]
+  - *infra* infrastructure-related images: ceph,certmonger,cron,elasticsearch,etcd,fluentd,haproxy,keepalived,kibana,kolla-toolbox,..,skydive,storm,tgtd
+  - *main* core OpenStack images: ceilometer,cinder,glance,heat,horizon,iscsi,keystone,neutron,nova-,swift
+  - *aux* các image phụ trợ như trove, magnum, ironic: almanach,aodh,blazar,cloudkitty,congress,designate,dragonflow,ec2-api,freezer,gnocchi,..,zookeeper,zun 
+  - *default* minimal set các image cho việc deploy: chrony,cron,kolla-toolbox,fluentd,glance,haproxy,heat,horizon,keepalived,keystone,mariadb,memcached,neutron,nova-,openvswitch,rabbitmq 
 ```
-[profileis]
+
+[profiles]
 magnum = magnum,heat
 ```
 
@@ -166,13 +132,26 @@ và
 python tools/build.py --registry 192.168.60.12:5000 --push 
 ```
 
+### Architecture of base image
+
+- kolla/centos-binary-base, kolla/centos-binary-openstack-base là các image luôn được build mỗi khi build bất kỳ image nào. 
+
+- Ví dụ khi thực hiện build nova-compute image, thứ tự các base image được build lần lượt
+  - centos ( centos sẽ không cần rebuild khi đã build các image trước đó ) 
+  - kolla/centos-binary-base ( sẽ được rebuild khi image được update )
+  - kolla/centos-binary-openstack-base ( sẽ được rebuild khi image được update )
+  - kolla/centos-binary-nova-base 
+  - Các image phụ thuộc
 ### Build OpenStack from source
 
 Khi build image, có hai tùy chọn được chỉ định với option `-t`
 - **binary** : OpenStack install từ apt/yum (default)
 - **source** : OpenStack được cài đặt từ source code 
 
-Vị trí của source code được ghi trong **etc/kolla/kolla-build.conf** có thể là: **url**, **git** hoặc **local**. **local** có thể là directory hoặc tarball của source.
+Mặc định các image được build thông qua repo kolla trên github. 
+
+Với tùy chọn **source**. Các tùy chọn khi build image dựa trên source được cung cấp: **url**, **git** hoặc **local**. **local** có thể là directory hoặc tarball của source. Các ví dụ cấu hình cho **url**, **git**, **local**.
+
 
 ```
 [glance-base]
@@ -200,7 +179,7 @@ Từ phiên bản Newton, kolla hỗ trợ Jinja2 cho phép chỉnh sửa Docker
 
 #### Generic Customisation 
 
-Cho phép chỉnh sửa bất kỳ **{% block ... %}**, vị trí các block được xác định trong các **Dockerfile.j2** trong cây *https://github.com/openstack/kolla/tree/master/docker*. Sử dụng file j2 để ghi đè các block khi build image.
+Cho phép chỉnh sửa bất kỳ **{% block ... %}**, vị trí các block được xác định trong các **Dockerfile.j2** trong cây *https://github.com/openstack/kolla/tree/master/docker *. Sử dụng file j2 để ghi đè các block khi build image.
 **template-override.j2**
 
 ```
@@ -324,3 +303,8 @@ RUN cp /additions/jenkins/jenkins.json /jenkins.json
 ## Pull images
 
 Ta có thể pull image từ local registry bằng cách thiết lập "docker_registry" "172.22.2.81:5000" trong "**/etc/kolla/globals.yml**"
+
+
+## Tài liệu tham khảo 
+
+[Kolla doc](https://docs.openstack.org/kolla/latest/admin/image-building.html)

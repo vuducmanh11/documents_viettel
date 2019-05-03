@@ -262,7 +262,7 @@ network_interface: "eth0"
 ```
 network_external_interface: "eth1"
 ```
-  -  floating IP cho mangagement traffic, bắt buộc phải được thiết lập nếu **kolla_enable_tls_external** được set yes, mặc định sử dụng địa chỉ **network_interface**
+  -  floating IP cho mangagement traffic, bắt buộc phải được thiết lập nếu **kolla_enable_tls_external** được set yes, mặc định sử dụng địa chỉ **network_interface**, sử dụng địa chỉ khác các địa chỉ của các host
 
 ```
 kolla_internal_vip_address: "10.1.0.244"

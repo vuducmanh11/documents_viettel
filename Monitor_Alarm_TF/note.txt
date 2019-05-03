@@ -1,0 +1,70 @@
+Read link: https://github.com/Juniper/contrail-controller/wiki/Monitoring-of-contrail-node-status-and-contrail-process'-status
+
+- Contrail control process state 
+
+```
+[root@sdncontroller manhvd]# curl -s http://10.60.17.233:8083/Snh_SandeshUVECacheReq?x=NodeStatus | xmllint --format -
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="/universal_parse.xsl"?>
+<__NodeStatusUVE_list type="slist">
+  <NodeStatusUVE type="sandesh">
+    <data type="struct" identifier="1">
+      <NodeStatus>
+        <name type="string" identifier="1" key="ObjectBgpRouter">sdncontroller.local</name>
+        <process_status type="list" identifier="4" aggtype="union">
+          <list type="struct" size="1">
+            <ProcessStatus>
+              <module_id type="string" identifier="1">contrail-control</module_id>
+              <instance_id type="string" identifier="2">0</instance_id>
+              <state type="string" identifier="3">Functional</state>
+              <connection_infos type="list" identifier="4">
+                <list type="struct" size="3">
+                  <ConnectionInfo>
+                    <type type="string" identifier="1">Collector</type>
+                    <name type="string" identifier="2"/>
+                    <server_addrs type="list" identifier="3">
+                      <list type="string" size="1">
+                        <element>10.1.1.241:8086</element>
+                      </list>
+                    </server_addrs>
+                    <status type="string" identifier="4">Up</status>
+                    <description type="string" identifier="5">Established</description>
+                  </ConnectionInfo>
+                  <ConnectionInfo>
+                    <type type="string" identifier="1">Database</type>
+                    <name type="string" identifier="2">Cassandra</name>
+                    <server_addrs type="list" identifier="3">
+                      <list type="string" size="1">
+                        <element>10.1.1.241:9041</element>
+                      </list>
+                    </server_addrs>
+                    <status type="string" identifier="4">Up</status>
+                    <description type="string" identifier="5">Established Cassandra connection</description>
+                  </ConnectionInfo>
+                  <ConnectionInfo>
+                    <type type="string" identifier="1">Database</type>
+                    <name type="string" identifier="2">RabbitMQ</name>
+                    <server_addrs type="list" identifier="3">
+                      <list type="string" size="1">
+                        <element>10.1.1.241:5673</element>
+                      </list>
+                    </server_addrs>
+                    <status type="string" identifier="4">Up</status>
+                    <description type="string" identifier="5">RabbitMQ connection established</description>
+                  </ConnectionInfo>
+                </list>
+              </connection_infos>
+              <description type="string" identifier="5"/>
+            </ProcessStatus>
+          </list>
+        </process_status>
+      </NodeStatus>
+    </data>
+  </NodeStatusUVE>
+  <SandeshUVECacheResp type="sandesh">
+    <returned type="u32" identifier="1">1</returned>
+    <period type="i32" identifier="2">0</period>
+    <more type="bool" identifier="0">false</more>
+  </SandeshUVECacheResp>
+</__NodeStatusUVE_list>
+```

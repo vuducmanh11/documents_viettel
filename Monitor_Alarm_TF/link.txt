@@ -4,3 +4,9 @@
 - https://github.com/Juniper/contrail-controller/wiki/Contrail-Analytics-Documentation
 - https://tungsten.io/anomaly-detection-for-network-flows-in-contrail-analytics/
 - http://www.opencontrail.org/operational-state-in-the-opencontrail-system-uve-user-visible-entities-through-analytics-api/
+
+
+New
+- https://www.juniper.net/documentation/en_US/contrail4.0/topics/task/configuration/configure-traffic-analyzer-vnc.html
+- https://www.juniper.net/documentation/en_US/contrail4.0/topics/concept/analytics-user-alarms-log-statistics.html
+- https://www.juniper.net/documentation/en_US/contrail4.0/topics/concept/alerts-overview.html

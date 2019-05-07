@@ -67,7 +67,7 @@ GET http://<analytics-ip>:8081/analytics/alarms
 - "any_of": có thể thêm biểu thức điều kiện với các alarm rule 
 *[ [rule1 AND rule2 AND ... AND ruleN] ... OR [rule11 AND rule22 AND ... AND ruleNN] ]*
 - "ack": biểu thị alert có được enable hay không
-- "token": được sử dụng để client yêu cầu acknowledgement
+- "token": được sử dụng bởi client để yêu cầu acknowledgement
 
 ### Analytics APIs for Alerts
 

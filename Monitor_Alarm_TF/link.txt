@@ -10,3 +10,14 @@ New
 - https://www.juniper.net/documentation/en_US/contrail4.0/topics/task/configuration/configure-traffic-analyzer-vnc.html
 - https://www.juniper.net/documentation/en_US/contrail4.0/topics/concept/analytics-user-alarms-log-statistics.html
 - https://www.juniper.net/documentation/en_US/contrail4.0/topics/concept/alerts-overview.html
+
+
+---
+https://www.juniper.net/documentation/en_US/contrail4.0/topics/concept/monitor-vnc.html
+http://www.opencontrail.org/opencontrail-architecture-documentation/
+http://www.opencontrail.org/debugging-and-system-visibility-in-a-sdn-environment/
+http://www.opencontrail.org/sandesh-a-sdn-analytics-interface/
+https://github.com/Juniper/contrail-controller/wiki/Flow-processing
+
+https://github.com/Juniper/contrail-controller/wiki/Process-Management-Infrastructure
+https://www.juniper.net/uk/en/products-services/sdn/contrail/

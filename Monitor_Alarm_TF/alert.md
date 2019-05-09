@@ -6,7 +6,7 @@
 
 ### Summary
 
-Alert được cung cấp trên mỗi UVE. Contrail Analytic sẽ bắn (hoặc gỡ) alert sử dụng python-coded 'rules', nó sẽ kiểm tra thông tin từ UVE và object's config. Một số rule được tạo sẵn, các rule khác có thể được thêm bởi pythonp lugin stevedore.
+Alert được cung cấp trên mỗi UVE. Contrail Analytic sẽ bắn (hoặc gỡ) alert sử dụng python-coded 'rules', nó sẽ kiểm tra thông tin từ UVE và object's config. Một số rule được tạo sẵn, các rule khác có thể được thêm bởi python plugin stevedore.
 
 Contrail Analytics API cung cấp 
 - Quyền đọc Alert một phần của UVE GET API

@@ -1,0 +1,28 @@
+
+### error log: [ERROR]: SANDESH: [DROP: NoSession] .. rule 
+error create alarm rules fail ?
+
+###  ????
+
+05/16/2019 09:25:43 PM [contrail-alarm-gen] [ERROR]: SANDESH: [DROP: WrongClientSMState] NodeStatusUVE: data = <<  name = control224.local  process_status = [ <<  module_id = contrail-alarm-gen  instance_id = 0  state = Non-Functional  connection_infos = [ <<  type = Redis-UVE  name = 10.60.17.224:6379  server_addrs = [ 10.60.17.224:6379,  ]  status = Up  >>, <<  type = Database  name = RabbitMQ  server_addrs = [ 10.60.17.224:5673,  ]  status = Up  description =   >>, <<  type = Redis-UVE  name = AggregateRedis  server_addrs = [ control224.local:6379,  ]  status = Down  >>, <<  type = Collector  name = Collector  server_addrs = [ ,  ]  status = Down  description = none to Idle on EvStart  >>, <<  type = Database  name = Cassandra  server_addrs = [ 10.60.17.224:9161,  ]  status = Up  description =   >>, <<  type = KafkaPub  name = KafkaTopic  status = Up  description = All Kafka partitions are reachable  >>, <<  type = Zookeeper  name = AlarmGenerator  server_addrs = [ 10.60.17.224:2181,  ]  status = Up  description = Connection to Zookeeper established  >>,  ]  description = Redis-UVE:AggregateRedis[None], Collector:Collector[none to Idle on EvStart] connection down  >>,  ]  >>  
+05/16/2019 09:25:43 PM [contrail-alarm-gen] [INFO]: Discarding event[EvSandeshUVESend] in state[Idle]
+05/16/2019 09:25:44 PM [contrail-alarm-gen] [INFO]: UVE Done
+05/16/2019 09:25:45 PM [contrail-alarm-gen] [INFO]: UVE Done
+05/16/2019 09:25:46 PM [contrail-alarm-gen] [INFO]: Processing event[EvIdleHoldTimerExpired] in state[Idle]
+05/16/2019 09:25:46 PM [contrail-alarm-gen] [INFO]: Session Event: TCP Connected
+05/16/2019 09:25:46 PM [contrail-alarm-gen] [INFO]: Sandesh Client: Event[EvIdleHoldTimerExpired] => State[Idle] -> State[Connect]
+05/16/2019 09:25:46 PM [contrail-alarm-gen] [INFO]: Processing event[EvSandeshUVESend] in state[Connect]
+05/16/2019 09:25:46 PM [contrail-alarm-gen] [ERROR]: SANDESH: [DROP: WrongClientSMState] NodeStatusUVE: data = <<  name = control224.local  process_status = [ <<  module_id = contrail-alarm-gen  instance_id = 0  state = Non-Functional  connection_infos = [ <<  type = Redis-UVE  name = 10.60.17.224:6379  server_addrs = [ 10.60.17.224:6379,  ]  status = Up  >>, <<  type = Database  name = RabbitMQ  server_addrs = [ 10.60.17.224:5673,  ]  status = Up  description =   >>, <<  type = Redis-UVE  name = AggregateRedis  server_addrs = [ control224.local:6379,  ]  status = Down  >>, <<  type = Collector  name = Collector  server_addrs = [ 10.60.17.224:8086,  ]  status = Initializing  description = Idle to Connect on EvIdleHoldTimerExpired  >>, <<  type = Database  name = Cassandra  server_addrs = [ 10.60.17.224:9161,  ]  status = Up  description =   >>, <<  type = KafkaPub  name = KafkaTopic  status = Up  description = All Kafka partitions are reachable  >>, <<  type = Zookeeper  name = AlarmGenerator  server_addrs = [ 10.60.17.224:2181,  ]  status = Up  description = Connection to Zookeeper established  >>,  ]  description = Redis-UVE:AggregateRedis[None], Collector:Collector[Idle to Connect on EvIdleHoldTimerExpired] connection down  >>,  ]  >>
+
+### ???
+
+05/16/2019 09:25:42 PM [contrail-alarm-gen] [ERROR]: Analytics Discovery Watcher AlarmGenerator Children []
+05/16/2019 09:25:42 PM [kazoo.client] [DEBUG]: Sending request(xid=3): Exists(path='/analytics-discovery-/Collector', watcher=None)
+05/16/2019 09:25:42 PM [kazoo.client] [DEBUG]: Received response(xid=3): ZnodeStat(czxid=207, mzxid=207, ctime=1557914577920, mtime=1557914577920, version=0, cversion=1, aversion=0, ephemeralOwner=0, dataLength=16, numChildren=1, pzxid=208)
+05/16/2019 09:25:42 PM [kazoo.client] [DEBUG]: Sending request(xid=4): GetChildren(path='/analytics-discovery-/Collector', watcher=<bound method ChildrenWatch._watcher of <kazoo.recipe.watchers.ChildrenWatch object at 0x7fe80b376d90>>)
+05/16/2019 09:25:42 PM [kazoo.client] [DEBUG]: Received response(xid=4): [u'control224.local']
+
+05/16/2019 09:25:42 PM [contrail-alarm-gen] [ERROR]: Analytics Discovery AlarmGenerator reconnect
+05/16/2019 09:25:42 PM [contrail-alarm-gen] [ERROR]: ensure /analytics-discovery-/AlarmGenerator
+05/16/2019 09:25:42 PM [contrail-alarm-gen] [ERROR]: zk state CONNECTED (CONNECTED)
+
